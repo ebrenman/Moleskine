@@ -1,0 +1,3 @@
+Proportion of images should be 1.57
+
+For example: 680x1068
