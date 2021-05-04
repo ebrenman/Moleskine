@@ -1,17 +1,23 @@
-$(function() {
-	var $mybook_images	= $('#mybook').find('img');
-	var cnt_images		= $mybook_images.length;
-	var loaded			= 0;
+var cached_images	= {}; // Initialize an object
+const cache_size	= 2;
+var cnt_images		= 0;
+
+$('document').ready(function() {
+	let mybook_images	= $('#mybook').find('img');
+	let loaded			= 0;
 	let booklet_loaded  = false;
 
+	cnt_images			= mybook_images.length;
+	
 	//preload all the images in the book,
 	//and then call the booklet plugin
 
-	$mybook_images.each(function(){
-		var $img 	= $(this);
-		var source	= $img.attr('src');
-		
-		$img.load(function(){
+	mybook_images.each(function(){
+		const img 	= $(this);
+		const source	= img.attr('src');
+		cached_images[img.data('index')] = [source,false];
+
+		img.load(function(){
 			console.log(source+' initialized:'+booklet_loaded);
 			++loaded;
 			if((loaded == cnt_images || loaded > 5)&&(!booklet_loaded)){ // show booklet when all images are loaded or when at least 5 images are loaded
@@ -25,17 +31,14 @@ $(function() {
 });
 
 function booklet_init() {
-	var $mybook 		= $('#mybook');
-	var $bttn_next		= $('#next_page_button');
-	var $bttn_prev		= $('#prev_page_button');
-	var $loading		= $('#loading');
+	const mybook 		= $('#mybook');
+	const bttn_next		= $('#next_page_button');
+	const bttn_prev		= $('#prev_page_button');
 
-
-
-	$loading.hide();
-	$bttn_next.show();
-	$bttn_prev.show();
-	$mybook.show().booklet({
+	$('#loading').hide();
+	bttn_next.show();
+	bttn_prev.show();
+	mybook.show().booklet({
 		name:               null,                            // name of the booklet to display in the document title bar
 		width:              800,                             // container width
 		height:             620,                             // container height
@@ -66,8 +69,8 @@ function booklet_init() {
 
 		hash:               false,                           // enables navigation using a hash string, ex: #/page/1 for page 1, will affect all booklets with 'hash' enabled
 		keyboard:           true,                            // enables navigation with arrow keys (left: previous, right: next)
-		next:               $bttn_next,          			// selector for element to use as click trigger for next page
-		prev:               $bttn_prev,          			// selector for element to use as click trigger for previous page
+		next:               bttn_next,          			// selector for element to use as click trigger for next page
+		prev:               bttn_prev,          			// selector for element to use as click trigger for previous page
 
 		menu:               null,                            // selector for element to use as the menu area, required for 'pageSelector'
 		pageSelector:       false,                           // enables navigation with a dropdown menu of pages, requires 'menu'
@@ -78,8 +81,35 @@ function booklet_init() {
 		shadowTopBackWidth: 166,                             // shadow width for top back anim
 		shadowBtmWidth:     50,                              // shadow width for bottom shadow
 
-		before:             function(){},                    // callback invoked before each page turn animation
-		after:              function(){}                     // callback invoked after each page turn animation
+		before:             construct_pages,                    // callback invoked before each page turn animation
+		after:              construct_pages2                     // callback invoked after each page turn animation
 	});
 	Cufon.refresh();
 }
+
+function construct_pages(mybook) {
+	console.log('Current page: '+mybook.curr);
+	const image_index = mybook.curr/2;
+	const start = cache_size*-1;
+
+	console.log ('total images: '+cnt_images);
+	console.log ('counter start: '+start);
+	console.log ('counter start: '+start);
+	
+	for (i=start;i<=cache_size;i++) {
+		console.log('Checking image index: '+(image_index+i));
+		if (image_index+i>0 && image_index+i<cnt_images) { //Check that index is not out of bounds
+			if (!cached_images[image_index+i][1]) { //Check if image has been previously loaded
+				console.log('cargar imagen'); 
+				console.log('image source: '+cached_images[image_index+i][0]);
+				cached_images[image_index+i][1] = true;
+			} 
+		}
+	}
+	console.log('imagen cargada');
+};
+
+function construct_pages2() {
+	console.log('hola after');
+};
+
