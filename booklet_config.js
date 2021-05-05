@@ -89,8 +89,6 @@ function booklet_init() {
 		before:             construct_pages,                    // callback invoked before each page turn animation
 		after:              function(){}                     // callback invoked after each page turn animation
 	});
-	
-	Cufon.refresh();
 };  
 
 function construct_pages(mybook) {
