@@ -14,20 +14,24 @@ $('document').ready(function() {
 
 	mybook_images.each(function(){
 		const img 	= $(this);
-		const source	= img.attr('src');
+		const source	= img.data('src');
 		cached_images[img.data('index')] = [source,false];
-
-		img.load(function(){
-			console.log(source+' initialized:'+booklet_loaded);
-			++loaded;
-			if((loaded == cnt_images || loaded > 5)&&(!booklet_loaded)){ // show booklet when all images are loaded or when at least 5 images are loaded
-				booklet_loaded = true;
-				booklet_init();
-
-			}
-		}).attr('src',source);
 	});
-	
+
+	var current_page = Math.floor(window.location.hash.split("/")[2]/2);
+
+	if (isNaN(current_page)){
+		current_page = 0;
+	};
+
+	cache_pages(current_page, function() {
+			booklet_init();
+	}); 
+          
+	;	
+
+
+
 });
 
 function booklet_init() {
@@ -35,6 +39,7 @@ function booklet_init() {
 	const bttn_next		= $('#next_page_button');
 	const bttn_prev		= $('#prev_page_button');
 
+	console.log('booklet initialized.');
 	$('#loading').hide();
 	bttn_next.show();
 	bttn_prev.show();
@@ -67,7 +72,7 @@ function booklet_init() {
 		arrows:             false,                           // adds arrows overlayed over the book edges
 		cursor:             'pointer',                       // cursor css setting for side bar areas
 
-		hash:               false,                           // enables navigation using a hash string, ex: #/page/1 for page 1, will affect all booklets with 'hash' enabled
+		hash:               true,                           // enables navigation using a hash string, ex: #/page/1 for page 1, will affect all booklets with 'hash' enabled
 		keyboard:           true,                            // enables navigation with arrow keys (left: previous, right: next)
 		next:               bttn_next,          			// selector for element to use as click trigger for next page
 		prev:               bttn_prev,          			// selector for element to use as click trigger for previous page
@@ -82,34 +87,36 @@ function booklet_init() {
 		shadowBtmWidth:     50,                              // shadow width for bottom shadow
 
 		before:             construct_pages,                    // callback invoked before each page turn animation
-		after:              construct_pages2                     // callback invoked after each page turn animation
+		after:              function(){}                     // callback invoked after each page turn animation
 	});
+	
 	Cufon.refresh();
-}
+};  
 
 function construct_pages(mybook) {
-	console.log('Current page: '+mybook.curr);
-	const image_index = mybook.curr/2;
+
+	cache_pages(mybook.curr/2,function(){});
+
+};
+
+function cache_pages(image_index, callback) {
 	const start = cache_size*-1;
 
+	console.log('Current page: '+image_index);	
 	console.log ('total images: '+cnt_images);
-	console.log ('counter start: '+start);
 	console.log ('counter start: '+start);
 	
 	for (i=start;i<=cache_size;i++) {
 		console.log('Checking image index: '+(image_index+i));
-		if (image_index+i>0 && image_index+i<cnt_images) { //Check that index is not out of bounds
+		if (image_index+i>=0 && image_index+i<cnt_images) { //Check that index is not out of bounds
 			if (!cached_images[image_index+i][1]) { //Check if image has been previously loaded
-				console.log('cargar imagen'); 
+				$("#mybook").find("[data-index='" + (image_index+i) + "']").attr("src",cached_images[image_index+i][0]); 
+
 				console.log('image source: '+cached_images[image_index+i][0]);
 				cached_images[image_index+i][1] = true;
 			} 
 		}
 	}
-	console.log('imagen cargada');
-};
+	callback();
 
-function construct_pages2() {
-	console.log('hola after');
-};
-
+}
