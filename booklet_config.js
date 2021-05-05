@@ -1,5 +1,5 @@
 var cached_images	= {}; // Initialize an object
-const cache_size	= 2;
+const cache_size	= 5;
 var cnt_images		= 0;
 
 $('document').ready(function() {

@@ -3,8 +3,8 @@
     <meta name="description" content="ebrenman - Mi Moleskine" />
     <meta name="keywords" content="book, flip, pages, moleskine, drawings,"/>
     <meta property="og:image" content="images/share.png" />
-	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
-
+	<link rel="shortcut icon" href="images/favicon.png" type="image/png"/>
+	
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
 	<script src="booklet/jquery.easing.1.3.js" type="text/javascript"></script>
 	<script src="booklet/jquery.booklet.1.1.0.min.js" type="text/javascript"></script>
