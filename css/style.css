@@ -32,9 +32,9 @@ span.reference a:hover{
 }
 /* Booklet jQuery Plugin Style*/
 .booklet{
-	-moz-box-shadow:0px 0px 1px #fff;
+/*	-moz-box-shadow:0px 0px 1px #fff;
 	-webkit-box-shadow:0px 0px 1px #fff;
-	box-shadow:0px 0px 1px #fff;
+	box-shadow:0px 0px 1px #fff; */
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
 	border-radius:10px;
@@ -86,7 +86,7 @@ span.reference a:hover{
 	width:905px;
 	height:640px;
 	position:relative;
-	background:transparent url(../images/bg.png) no-repeat 9px 27px;
+	background:transparent url(../images/bg.png) no-repeat 9px 27px ; 
 }
 .book_wrapper h1{
 	color:#13386a;
@@ -128,9 +128,9 @@ span.reference a:hover{
 	border:1px solid #ddd; */
 	border-radius: 0px 15px 12px 0px;
 	mix-blend-mode: darken;
-	-moz-box-shadow:1px 1px 1px #fff;
+/*	-moz-box-shadow:1px 1px 1px #fff; 
 	-webkit-box-shadow:1px 1px 1px #fff;
-	box-shadow:1px 1px 1px #fff;
+	box-shadow:1px 1px 1px #fff; */
 }
 .booklet .b-wrap-right img{
 /*	border:1px solid #E6E3C2; */
