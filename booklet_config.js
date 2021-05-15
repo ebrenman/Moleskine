@@ -1,16 +1,16 @@
 var cached_images	= {}; // Initialize an object
-const cache_size	= 5;
+const cache_size	= 3;
 var cnt_images		= 0;
+var booklet_loaded  = false;
 
 $('document').ready(function() {
 	let mybook_images	= $('#mybook').find('img');
-	let loaded			= 0;
-	let booklet_loaded  = false;
 
 	cnt_images			= mybook_images.length;
 	
-	//preload all the images in the book,
-	//and then call the booklet plugin
+	console.log(document.readyState);
+
+	
 
 	mybook_images.each(function(){
 		const img 	= $(this);
@@ -24,13 +24,20 @@ $('document').ready(function() {
 		current_page = 0;
 	};
 
-	cache_pages(current_page, function() {
-			booklet_init();
-	}); 
-          
-	;	
+	// mybook_images.find("[data-index='" + current_page + "']").attr("src");
 
+	
+    
+    document.onreadystatechange = function() {
+	console.log(document.readyState);
 
+		if (document.readyState == "complete") {
+			$('#loading').show(); //only show loading when the book images have been loaded
+			cache_pages(current_page, function() {
+				booklet_init();
+			}); 
+		}
+	};
 
 });
 
@@ -38,6 +45,8 @@ function booklet_init() {
 	const mybook 		= $('#mybook');
 	const bttn_next		= $('#next_page_button');
 	const bttn_prev		= $('#prev_page_button');
+
+	booklet_loaded  = true;
 
 	console.log('booklet initialized.');
 	$('#loading').hide();
@@ -49,7 +58,7 @@ function booklet_init() {
 		height:             620,                             // container height
 		speed:              600,                             // speed of the transition between pages
 		direction:          'LTR',                           // direction of the overall content organization, default LTR, left to right, can be RTL for languages which read right to left
-		startingPage:       0,                               // index of the first page to be displayed
+		startingPage:       1,                               // index of the first page to be displayed
 		easing:             'easeInOutQuad',                 // easing method for complete transition
 		easeIn:             'easeInQuad',                    // easing method for first half of transition
 		easeOut:            'easeOutQuad',                   // easing method for second half of transition
@@ -104,17 +113,27 @@ function cache_pages(image_index, callback) {
 	console.log ('total images: '+cnt_images);
 	console.log ('counter start: '+start);
 	
-	for (i=start;i<=cache_size;i++) {
-		console.log('Checking image index: '+(image_index+i));
-		if (image_index+i>=0 && image_index+i<cnt_images) { //Check that index is not out of bounds
-			if (!cached_images[image_index+i][1]) { //Check if image has been previously loaded
-				$("#mybook").find("[data-index='" + (image_index+i) + "']").attr("src",cached_images[image_index+i][0]); 
+	//preload cached images in the book,
+	//and then call the booklet plugin
 
-				console.log('image source: '+cached_images[image_index+i][0]);
-				cached_images[image_index+i][1] = true;
+	for (i = start; i <= cache_size; i++) {
+		const current_image = image_index+i;
+
+		console.log('Checking image index: '+ current_image);
+		if (current_image >= 0 && current_image < cnt_images) { //Check that index is not out of bounds
+			if (!cached_images[current_image][1]) { //Check if image has been previously loaded
+				const myimage = $("#mybook").find("[data-index='" + (current_image) + "']");
+				myimage.attr("src",cached_images[current_image][0]); 
+
+				console.log('image source: '+ cached_images[current_image][0]);
+				if (current_image == image_index && !booklet_loaded){
+					myimage.load(function()  {
+						callback();
+					});
+				}
+				cached_images[current_image][1] = true;
 			} 
 		}
 	}
-	callback();
 
-}
+};

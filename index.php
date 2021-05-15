@@ -5,7 +5,7 @@
 		<div class="book_wrapper">
 			<a id="next_page_button"></a>
 			<a id="prev_page_button"></a>
-			<div id="loading" class="loading">Loading pages...</div>
+			<div id="loading" class="loading" style="display:none;"></div>
 			<div id="mybook" style="display:none;">
 				<div class="b-load">
 					<?php include_once "./load_book.php"; ?>
