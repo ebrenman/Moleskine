@@ -116,13 +116,14 @@ function cache_pages(image_index, callback) {
 
 	if (image_index != 0 && image_index != last_page) {
 		$(".book_wrapper").css('background', 'transparent url(images/bg.png) no-repeat 9px 27px');
-		$(".b-wrap-right").css('background', '#efefef');
+		$(".b-wrap-right").css('background', '#2345ae url(images/right_bg.jpg) no-repeat top left');
 		$(".b-p2").css('background', '');
 		console.log ('open book loaded');
 	} else if (image_index == 0) {
 		$(".book_wrapper").css('background', 'transparent url(images/cover_closed_first.png) no-repeat 9px 27px');
 		$(".b-wrap-right").css('background', 'black');
 		$(".b-p2").css('background', 'black');
+		console.log ('trying to set front cover page to black');
 	} else {
 
 	}

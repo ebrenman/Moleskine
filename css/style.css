@@ -52,7 +52,7 @@ span.reference a:hover{
 	justify-content: center;
 }
 .booklet .b-wrap-right {
-	background:#efefef url(../images/right_bg.jpg) no-repeat top left;
+/*	background:#efefef url(../images/right_bg.jpg) no-repeat top left; */
 	-webkit-border-top-right-radius: 10px;
 	-webkit-border-bottom-right-radius: 10px;
 	-moz-border-radius-topright: 10px;
