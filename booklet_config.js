@@ -8,7 +8,7 @@ $('document').ready(function() {
 
 	cnt_images			= mybook_images.length;
 	
-	console.log(document.readyState);
+	//console.log(document.readyState);
 
 	
 
@@ -19,7 +19,6 @@ $('document').ready(function() {
 	});
 
 	var current_page = Math.floor(window.location.hash.split("/")[2]/2);
-
 	if (isNaN(current_page)){
 		current_page = 0;
 	};
@@ -29,19 +28,19 @@ $('document').ready(function() {
 	
     
     document.onreadystatechange = function() {
-	console.log(document.readyState);
+	//console.log(document.readyState);
 
 		if (document.readyState == "complete") {
 			$('#loading').show(); //only show loading when the book images have been loaded
 			cache_pages(current_page, function() {
-				booklet_init();
+				booklet_init(current_page);
 			}); 
 		}
 	};
 
 });
 
-function booklet_init() {
+function booklet_init(current_page) {
 	const mybook 		= $('#mybook');
 	const bttn_next		= $('#next_page_button');
 	const bttn_prev		= $('#prev_page_button');
@@ -96,9 +95,15 @@ function booklet_init() {
 		shadowBtmWidth:     50,                              // shadow width for bottom shadow
 
 		before:             construct_pages,                    // callback invoked before each page turn animation
-		after:              function(){}                     // callback invoked after each page turn animation
+		after:              set_covers                     // callback invoked after each page turn animation
 	});
+	setTimeout(set_cover_pages(current_page),2000);
 };  
+
+
+
+
+
 
 function construct_pages(mybook) {
 
@@ -109,31 +114,24 @@ function construct_pages(mybook) {
 function cache_pages(image_index, callback) {
 	const start = cache_size*-1;
 	const last_page = ((cnt_images+1)*2)+1; // Adds 1 page at the beggining (cover page) and one at the end
-	console.log('Current page: '+image_index);	
-	console.log ('total images: '+cnt_images);
-	console.log ('counter start: '+start);
+	//console.log('Current page: '+image_index);	
+	//console.log ('total images: '+cnt_images);
+	//console.log ('counter start: '+start);
 	
-
 	if (image_index != 0 && image_index != last_page) {
 		$(".book_wrapper").css('background', 'transparent url(images/bg.png) no-repeat 9px 27px');
 		$(".b-wrap-right").css('background', '#2345ae url(images/right_bg.jpg) no-repeat top left');
 		$(".b-p2").css('background', '');
 		console.log ('open book loaded');
-	} else if (image_index == 0) {
-		$(".book_wrapper").css('background', 'transparent url(images/cover_closed_first.png) no-repeat 9px 27px');
-		$(".b-wrap-right").css('background', 'black');
-		$(".b-p2").css('background', 'black');
-		console.log ('trying to set front cover page to black');
-	} else {
+	} 
 
-	}
 	//preload cached images in the book,
 	//and then call the booklet plugin
 
 	for (i = start; i <= cache_size; i++) {
 		const current_image = image_index+i;
 
-		console.log('Checking image index: '+ current_image);
+		//console.log('Checking image index: '+ current_image);
 		if (current_image >= 0 && current_image < cnt_images) { //Check that index is not out of bounds
 			if (!cached_images[current_image][1]) { //Check if image has been previously loaded
 				const myimage = $("#mybook").find("[data-index='" + (current_image) + "']");
@@ -151,3 +149,27 @@ function cache_pages(image_index, callback) {
 	}
 
 };
+
+function set_covers(mybook) {
+	set_cover_pages(mybook.curr/2);
+}
+
+function set_cover_pages(image_index) {
+	//const image_index = mybook.curr/2
+	const last_page = ((cnt_images+1)*2)+1; // Adds 1 page at the beggining (cover page) and one at the end	
+	console.log ('Setting cover pages / '+' Image_index: '+image_index+' Last page: '+last_page);
+	//console.log (mybook);
+
+	if (image_index == 0) {
+		$(".book_wrapper").css('background', 'transparent url(images/front_cover.png) no-repeat 9px 27px');
+		$(".b-wrap-right").css('background', 'black');
+		$(".b-p2").css('background', 'black');
+		console.log ('trying to set front cover page to black');
+	} else if (image_index == (last_page-1)/2) { 
+		$(".book_wrapper").css('background', 'transparent url(images/back_cover.png) no-repeat 9px 27px');
+		$(".b-wrap-left").css('background', 'black');
+		$(".b-p2").css('background', 'black');
+
+	}
+	
+}
