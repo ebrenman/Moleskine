@@ -5,12 +5,7 @@ var booklet_loaded  = false;
 
 $('document').ready(function() {
 	let mybook_images	= $('#mybook').find('img');
-
 	cnt_images			= mybook_images.length;
-	
-	//console.log(document.readyState);
-
-	
 
 	mybook_images.each(function(){
 		const img 	= $(this);
@@ -23,13 +18,7 @@ $('document').ready(function() {
 		current_page = 0;
 	};
 
-	// mybook_images.find("[data-index='" + current_page + "']").attr("src");
-
-	
-    
     document.onreadystatechange = function() {
-	//console.log(document.readyState);
-
 		if (document.readyState == "complete") {
 			$('#loading').show(); //only show loading when the book images have been loaded
 			cache_pages(current_page, function() {
@@ -94,29 +83,21 @@ function booklet_init(current_page) {
 		shadowTopBackWidth: 166,                             // shadow width for top back anim
 		shadowBtmWidth:     50,                              // shadow width for bottom shadow
 
-		before:             construct_pages,                    // callback invoked before each page turn animation
-		after:              set_covers                     // callback invoked after each page turn animation
+		start:             construct_pages,                    // callback invoked before each page turn animation
+		change:              set_covers                     // callback invoked after each page turn animation
 	});
 	setTimeout(set_cover_pages(current_page),2000);
 };  
 
-
-
-
-
-
-function construct_pages(mybook) {
-
-	cache_pages(mybook.curr/2,function(){});
-
+function construct_pages(event, data) {
+	let number_page = data.index;
+	cache_pages(number_page,function(){});
 };
 
 function cache_pages(image_index, callback) {
 	const start = cache_size*-1;
 	const last_page = ((cnt_images+1)*2)+1; // Adds 1 page at the beggining (cover page) and one at the end
-	//console.log('Current page: '+image_index);	
-	//console.log ('total images: '+cnt_images);
-	//console.log ('counter start: '+start);
+
 	
 	if (image_index != 0 && image_index != last_page) {
 		$(".book_wrapper").css('background', 'transparent url(images/bg.png) no-repeat 9px 27px');
@@ -150,8 +131,8 @@ function cache_pages(image_index, callback) {
 
 };
 
-function set_covers(mybook) {
-	set_cover_pages(mybook.curr/2);
+function set_covers(event, data) {
+	set_cover_pages(data.index);
 }
 
 function set_cover_pages(image_index) {
@@ -171,5 +152,14 @@ function set_cover_pages(image_index) {
 		$(".b-p2").css('background', 'black');
 
 	}
-	
+
+	/*
+	 setTimeout(function() {
+		let go_page = $('#mybook').booklet("option", "currentIndex") + 2;
+		go_page;
+		$('#mybook').booklet("gotopage", go_page);
+		console.log('cambiando a ' + go_page);
+	}, 5000);
+
+	 */
 }
