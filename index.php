@@ -12,6 +12,6 @@
 				</div>
 			</div>
 		</div>
-        <script src="./booklet_config.js" type="text/javascript"></script>
+        <script src="./booklet_config.js?v=1" type="text/javascript"></script>
     </body>
 </html>
