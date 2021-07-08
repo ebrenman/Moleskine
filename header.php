@@ -1,7 +1,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="description" content="ebrenman - Mi Moleskine" />
-    <meta name="keywords" content="book, flip, pages, moleskine, drawings,"/>
+    <meta name="description" content="Mi forma de estar - cuadernos" />
+    <meta name="keywords" content="cuadernos, dibujos, libretas, diario grafico, book, flip, pages, moleskine, drawings,"/>
     <meta property="og:image" content="images/share.png" />
 	<link rel="shortcut icon" href="images/favicon.png" type="image/png"/>
 
